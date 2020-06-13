@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class miner {
 
@@ -16,21 +17,26 @@ public class miner {
 	}
 
 	//the current proof of work uses transaction ID's and the last target to simulate mining a block
-	public void mine(int x) {
-
+	public void mine(int target, ArrayList<String> transactions) {
+		boolean finished = false;
+		while(!finished) {
+			Collections.sort(transactions);
+		}
 	}
 
+	@SuppressWarnings("finally")
 	public ArrayList<String> getTransactions() {
+		ArrayList<String> transactions = new ArrayList<String>();
 		try {
-			ArrayList<String> transactions = new ArrayList<String>();
 			Statement statement;
 			statement = this.con.createStatement();
 			ResultSet rs=statement.executeQuery("select * from transactions");  
 			while(rs.next()) transactions.add(rs.getString(0));  
 			con.close();  
-			return transactions;
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+		return transactions;
 		}
 	}
 	//this method connects to the user account on the database;
