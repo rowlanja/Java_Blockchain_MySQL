@@ -1,24 +1,34 @@
 import java.sql.*;
+import java.util.ArrayList;
 
 public class miner {
-	
+
 	public final String classname = "com.mysql.cj.jdbc.Driver"; 
-	public final String connection = "jdbc:mysql://localhost:3306/chatRoom";
-	public final String type = "user";
-	public final String userPassword = "passwordUSER365";
+	public final String connection = "jdbc:mysql://localhost:3306/transactions	";
+	public final String type = "miner";
+	public final String userPassword = "passwordMINER365";
 	public int userId;
 	public Connection con;
 
-	public worker(int userId, Connection con) {
+	public miner(int userId, Connection con) {
 		this.userId = userId;
 		this.con = con;
 	}
 
-	public void sendMessage() {
-		Statement statement;
+	//the current proof of work uses transaction ID's and the last target to simulate mining a block
+	public void mine(int x) {
+
+	}
+
+	public ArrayList<String> getTransactions() {
 		try {
+			ArrayList<String> transactions = new ArrayList<String>();
+			Statement statement;
 			statement = this.con.createStatement();
-			statement.executeUpdate("INSERT INTO messages " + "VALUES (, 'Simpson', 'Mr.', 'Springfield', 2001)");
+			ResultSet rs=statement.executeQuery("select * from transactions");  
+			while(rs.next()) transactions.add(rs.getString(0));  
+			con.close();  
+			return transactions;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -33,7 +43,7 @@ public class miner {
 					this.connection,
 					this.type,
 					this.userPassword
-			);  
+					);  
 			this.con = con;
 		}catch(Exception e){ 
 			System.out.println(e);
@@ -41,8 +51,6 @@ public class miner {
 	}
 
 	public static void main(String[] args) {
-		user x = new user("jim", 1,null);
-		x.connectDB();
 	}
 }
-}
+
