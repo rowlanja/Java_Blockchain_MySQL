@@ -15,6 +15,8 @@ import java.time.*
 	public Connection con;
 	public int count;
 	public int winCount;
+	public final int TARGET = 1;
+	//revise coming up with target this is just a placeholder right now to help come up with the mining function
 
 	public miner(int userId, Connection con, int missCount, int winCount) {
 		this.userId = userId;
@@ -30,16 +32,16 @@ import java.time.*
 	 */
 	public void mine(int target, ResultSet Query) {
 		try {
+		    Random rand = new Random(); //instance of random class
 			int min, max;
 			min = max  = 0;
 			boolean finished = false;
 			while(Query.next())count += Query.getInt(4);
 			while(!finished) {
 				if(this.winCount == 30) this.relax();
-
-				LocalDate myObj = LocalDate.now(); // Create a date object
-				max = 100  - this.count;
-				int guess = Math.random(); 
+			    int int_random = rand.nextInt(100); 
+			    int sum = Query.getInt(1);
+			    if(int_random + sum == TARGET)
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -48,7 +50,7 @@ import java.time.*
 
 	public void relax() {
 		try {
-			this.sleep(10000);
+			Thread.sleep(10000);
 			this.winCount = this.count = 0;
 			return;
 		} catch (InterruptedException e) {
