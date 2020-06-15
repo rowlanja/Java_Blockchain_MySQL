@@ -11,11 +11,10 @@ import java.time.*
 	public final String connection = "jdbc:mysql://localhost:3306/transactions	";
 	public final String type = "miner";
 	public final String userPassword = "passwordMINER365";
-	public int userId;
 	public Connection con;
-	public int count;
-	public int winCount;
+	public int count, winCount, userId, gold;
 	public final int TARGET = 1;
+	
 	//revise coming up with target this is just a placeholder right now to help come up with the mining function
 
 	public miner(int userId, Connection con, int missCount, int winCount) {
@@ -23,6 +22,7 @@ import java.time.*
 		this.con = con;
 		this.count = missCount;
 		this.winCount = winCount;
+		this.gold = 0;
 	}
 
 	//the current proof of work uses transaction ID's and the last target to simulate mining a block
@@ -41,7 +41,7 @@ import java.time.*
 				if(this.winCount == 30) this.relax();
 				int int_random = rand.nextInt(100); 
 				int sum = Query.getInt(1);
-				if(int_random + sum == TARGET) this.win(Query);//FINISH;
+				if(int_random + sum == TARGET) this.win(Query, sum);//FINISH;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,17 +54,19 @@ import java.time.*
 	 * add the block to the block table
 	 */
 
-	public void win(ResultSet Qeury) {
+	public void win(ResultSet Qeury, int sum, int minerID) {
 		try {
 			Statement stmt = con.createStatement();
 			while(Qeury.next()) {
 				String Trans_ID = Qeury.getString(4);
 				stmt.execute("DELETE FROM messages WHERE transaction_id = " + Trans_ID);
 			}
+			stmt.execute("INSERT INTO blockchain VALUES " + sum + " " + minerID);
 			
 		}catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+			this.gold += 1;
 		}
 	}
 
