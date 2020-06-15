@@ -32,19 +32,39 @@ import java.time.*
 	 */
 	public void mine(int target, ResultSet Query) {
 		try {
-		    Random rand = new Random(); //instance of random class
+			Random rand = new Random(); //instance of random class
 			int min, max;
 			min = max  = 0;
 			boolean finished = false;
 			while(Query.next())count += Query.getInt(4);
 			while(!finished) {
 				if(this.winCount == 30) this.relax();
-			    int int_random = rand.nextInt(100); 
-			    int sum = Query.getInt(1);
-			    if(int_random + sum == TARGET)
+				int int_random = rand.nextInt(100); 
+				int sum = Query.getInt(1);
+				if(int_random + sum == TARGET) this.win(Query);//FINISH;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * when a block is successfully mined we have to cancel mining of the transactions from other miners;
+	 * remove all the transactions that were mined succesfully
+	 * add the block to the block table
+	 */
+
+	public void win(ResultSet Qeury) {
+		try {
+			Statement stmt = con.createStatement();
+			while(Qeury.next()) {
+				String Trans_ID = Qeury.getString(4);
+				stmt.execute("DELETE FROM messages WHERE transaction_id = " + Trans_ID);
+			}
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
 		}
 	}
 
