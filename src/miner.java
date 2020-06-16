@@ -12,13 +12,13 @@ import java.time.*
 	public final String type = "miner";
 	public final String userPassword = "passwordMINER365";
 	public Connection con;
-	public int count, winCount, userId, gold;
+	public int count, winCount, minerId, gold;
 	public final int TARGET = 1;
-	
+
 	//revise coming up with target this is just a placeholder right now to help come up with the mining function
 
-	public miner(int userId, Connection con, int missCount, int winCount) {
-		this.userId = userId;
+	public miner(int minerId, Connection con, int missCount, int winCount) {
+		this.minerId = minerId;
 		this.con = con;
 		this.count = missCount;
 		this.winCount = winCount;
@@ -32,22 +32,20 @@ import java.time.*
 	 */
 	public void mine(int target, ResultSet Query) {
 		try {
-			Random rand = new Random(); //instance of random class
-			int min, max;
-			min = max  = 0;
+			Random rand = new Random(); //instance of random classS
 			boolean finished = false;
 			while(Query.next())count += Query.getInt(4);
 			while(!finished) {
 				if(this.winCount == 30) this.relax();
 				int int_random = rand.nextInt(100); 
 				int sum = Query.getInt(1);
-				if(int_random + sum == TARGET) this.win(Query, sum);//FINISH;
+				if(int_random + sum == TARGET) this.win(Query, sum,this.minerId);//FINISH;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
 	 * when a block is successfully mined we have to cancel mining of the transactions from other miners;
 	 * remove all the transactions that were mined succesfully
@@ -62,7 +60,6 @@ import java.time.*
 				stmt.execute("DELETE FROM messages WHERE transaction_id = " + Trans_ID);
 			}
 			stmt.execute("INSERT INTO blockchain VALUES " + sum + " " + minerID);
-			
 		}catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
