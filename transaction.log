@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2020-06-23T12:22:31</date>
+  <millis>1592911351362</millis>
+  <sequence>1</sequence>
+  <logger>MyLog</logger>
+  <level>INFO</level>
+  <class>writingTransactions</class>
+  <method>write</method>
+  <thread>1</thread>
+  <message>200 sample transactions created</message>
+</record>
+<record>
+  <date>2020-06-23T12:22:31</date>
+  <millis>1592911351364</millis>
+  <sequence>2</sequence>
+  <logger>MyLog</logger>
+  <level>INFO</level>
+  <class>writingTransactions</class>
+  <method>write</method>
+  <thread>1</thread>
+  <message>completed writing transactions</message>
+</record>
+</log>
+Hello WorldHello World
